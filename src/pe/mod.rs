@@ -297,10 +297,6 @@ impl<'a> PE<'a> {
                     opts,
                 )?;
                 debug!("CLR data: {:#?}", clr_data);
-                debug!(
-                    "CLR data: {:#?}",
-                    clr_data.sections().collect::<Result<Vec<_>, _>>()?
-                );
             }
 
             // Parse attribute certificates unless opted out of
