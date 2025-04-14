@@ -236,12 +236,10 @@ impl<'a> TlsData<'a> {
             })?;
 
             if offset > bytes.len() || offset_end > bytes.len() {
-                return Err(error::Error::Malformed(format!(
-                    "tls raw data offset ({:#x}) and size ({:#x}) greater than byte slice len ({:#x})",
-                    offset, size, bytes.len()
-                )));
+                raw_data = None;
+            } else {
+                raw_data = Some(&bytes[offset..offset + size as usize]);
             }
-            raw_data = Some(&bytes[offset..offset + size as usize]);
         }
 
         // Parse the index if any
