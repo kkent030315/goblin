@@ -567,13 +567,16 @@ impl<'a> UnwindInfo<'a> {
         let codes_size = count_of_codes as usize * UNWIND_CODE_SIZE;
         let code_bytes = bytes.gread_with(&mut offset, codes_size)?;
 
-        // For alignment purposes, the codes array always has an even number of entries, and the
+        // For alignment purposes, the codes array typically has an even number of entries, and the
         // final entry is potentially unused. In that case, the array is one longer than indicated
         // by the count of unwind codes field.
         if count_of_codes % 2 != 0 {
             offset += 2;
         }
-        debug_assert!(offset % 4 == 0);
+
+        if offset % 4 != 0 {
+            offset += 4 - (offset % 4);
+        }
 
         let mut chained_info = None;
         let mut handler = None;
